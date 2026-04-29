@@ -8,298 +8,146 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>ClimbMaster EPS</title>
     
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Outfit:wght@400;900&display=swap');
-
-        :root {
-            --climb-dark: #1E293B;
-            --climb-teal: #2DD4BF;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #f1f5f9;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
+        :root { --climb-dark: #1E293B; }
+        body { font-family: 'Outfit', sans-serif; background-color: #f1f5f9; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
         .marker-font { font-family: 'Permanent Marker', cursive; }
-
-        .card-neo {
-            background: white;
-            border: 4px solid var(--climb-dark);
-            box-shadow: 8px 8px 0px var(--climb-dark);
-            border-radius: 12px;
-        }
-
-        .btn-neo {
-            border: 3px solid var(--climb-dark);
-            box-shadow: 4px 4px 0px var(--climb-dark);
-            transition: all 0.1s ease;
-            cursor: pointer;
-        }
-
-        .btn-neo:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--climb-dark);
-        }
-
-        /* Sélecteur de hauteur tactile */
-        .height-btn {
-            padding: 12px 5px;
-            border: 2px solid #000;
-            border-radius: 8px;
-            font-weight: 900;
-            text-align: center;
-            cursor: pointer;
-            background: white;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .height-btn.selected {
-            background-color: #facc15;
-            transform: scale(1.05);
-            box-shadow: 3px 3px 0px #000;
-        }
-
-        /* Couleurs de progression */
+        .card-neo { background: white; border: 4px solid var(--climb-dark); box-shadow: 8px 8px 0px var(--climb-dark); border-radius: 12px; }
+        .btn-neo { border: 3px solid var(--climb-dark); box-shadow: 4px 4px 0px var(--climb-dark); transition: all 0.1s ease; cursor: pointer; }
+        .btn-neo:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--climb-dark); }
+        .height-btn { padding: 12px 5px; border: 2px solid #000; border-radius: 8px; font-weight: 900; background: white; cursor: pointer; }
+        .height-btn.selected { background-color: #facc15; transform: scale(1.05); box-shadow: 3px 3px 0px #000; }
         .status-up { background-color: #4ade80 !important; }
         .status-equal { background-color: #fb923c !important; }
         .status-down { background-color: #f87171 !important; }
-
-        .input-style {
-            border: 3px solid #1E293B;
-            border-radius: 8px;
-            padding: 12px;
-            font-weight: bold;
-            width: 100%;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     </style>
 </head>
 <body class="pb-32">
-
-    <header class="bg-teal-500 p-6 rounded-b-[3rem] border-b-8 border-slate-900 shadow-2xl mb-8 relative overflow-hidden">
-        <div class="relative z-10 text-center">
-            <h1 class="marker-font text-white text-5xl drop-shadow-[4px_4px_0px_#1E293B]">CLIMB MASTER</h1>
-            <p class="text-teal-900 font-black uppercase tracking-widest text-xs mt-1">Session Escalade EPS</p>
-        </div>
-        <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-teal-400 rotate-45 opacity-50"></div>
-        <div class="absolute -bottom-8 -right-4 w-32 h-32 bg-teal-600 rotate-12 opacity-50"></div>
+    <header class="bg-teal-500 p-6 rounded-b-[3rem] border-b-8 border-slate-900 shadow-2xl mb-8 text-center relative overflow-hidden">
+        <h1 class="marker-font text-white text-5xl drop-shadow-[4px_4px_0px_#1E293B]">CLIMB MASTER</h1>
+        <p class="text-teal-900 font-black uppercase tracking-widest text-xs mt-1">Sauvegarde Automatique Active ✅</p>
     </header>
 
     <main class="max-w-md mx-auto px-4">
-        
         <section class="card-neo p-5 mb-10">
-            <h2 class="marker-font text-2xl mb-4 text-slate-800 flex items-center gap-2">
-                🧗 AJOUTER UN PASSAGE
-            </h2>
-            
+            <h2 class="marker-font text-2xl mb-4">🧗 NOUVELLE GRIMPE</h2>
             <div class="space-y-4">
-                <div>
-                    <label class="block font-black text-xs uppercase text-slate-500 mb-1">Nom de l'élève</label>
-                    <input type="text" id="studentName" placeholder="Prénom" class="input-style text-lg">
-                </div>
-
+                <input type="text" id="studentName" placeholder="Prénom de l'élève" class="w-full border-3 border-slate-800 p-3 rounded-lg font-bold outline-none border-[3px]">
                 <div class="flex gap-4">
-                    <div class="w-1/3">
-                        <label class="block font-black text-xs uppercase text-slate-500 mb-1">N° Voie</label>
-                        <input type="number" id="routeNumber" placeholder="Voie" class="input-style">
-                    </div>
-                    <div class="flex-1">
-                        <label class="block font-black text-xs uppercase text-slate-500 mb-1">Couleur</label>
-                        <select id="routeColor" class="input-style bg-white">
-                            <option value="Blanc">Blanc</option>
-                            <option value="Rose">Rose</option>
-                            <option value="Orange">Orange</option>
-                            <option value="Rouge">Rouge</option>
-                            <option value="Vert">Vert</option>
-                            <option value="Bleu">Bleu</option>
-                            <option value="Noir">Noir</option>
-                            <option value="Jaune">Jaune</option>
-                            <option value="Violet">Violet</option>
-                        </select>
-                    </div>
+                    <input type="number" id="routeNumber" placeholder="N°" class="w-1/3 border-[3px] border-slate-800 p-3 rounded-lg font-bold">
+                    <select id="routeColor" class="flex-1 border-[3px] border-slate-800 p-3 rounded-lg font-bold bg-white">
+                        <option value="Blanc">Blanc</option><option value="Rose">Rose</option><option value="Orange">Orange</option>
+                        <option value="Rouge">Rouge</option><option value="Vert">Vert</option><option value="Bleu">Bleu</option>
+                        <option value="Noir">Noir</option><option value="Jaune">Jaune</option><option value="Violet">Violet</option>
+                    </select>
                 </div>
-
-                <div>
-                    <label class="block font-black text-xs uppercase text-slate-500 mb-2">Hauteur Atteinte</label>
-                    <div id="heightGrid" class="grid grid-cols-5 gap-2">
-                        <button class="height-btn" onclick="selectHeight('Sol')">Sol</button>
-                        <button class="height-btn" onclick="selectHeight('D1')">D1</button>
-                        <button class="height-btn" onclick="selectHeight('D2')">D2</button>
-                        <button class="height-btn" onclick="selectHeight('D3')">D3</button>
-                        <button class="height-btn" onclick="selectHeight('D4')">D4</button>
-                        <button class="height-btn" onclick="selectHeight('D5')">D5</button>
-                        <button class="height-btn" onclick="selectHeight('D6')">D6</button>
-                        <button class="height-btn" onclick="selectHeight('D7')">D7</button>
-                        <button class="height-btn" onclick="selectHeight('D8')">D8</button>
-                        <button class="height-btn" onclick="selectHeight('TOP')">TOP</button>
-                    </div>
+                <div id="heightGrid" class="grid grid-cols-5 gap-2">
+                    <!-- Les boutons de hauteur -->
+                    <button class="height-btn" onclick="selectHeight('Sol')">Sol</button>
+                    <button class="height-btn" onclick="selectHeight('D1')">D1</button>
+                    <button class="height-btn" onclick="selectHeight('D2')">D2</button>
+                    <button class="height-btn" onclick="selectHeight('D3')">D3</button>
+                    <button class="height-btn" onclick="selectHeight('D4')">D4</button>
+                    <button class="height-btn" onclick="selectHeight('D5')">D5</button>
+                    <button class="height-btn" onclick="selectHeight('D6')">D6</button>
+                    <button class="height-btn" onclick="selectHeight('D7')">D7</button>
+                    <button class="height-btn" onclick="selectHeight('D8')">D8</button>
+                    <button class="height-btn" onclick="selectHeight('TOP')">TOP</button>
                 </div>
-
-                <button onclick="saveResult()" class="w-full btn-neo bg-yellow-400 py-4 font-black text-xl text-slate-900 mt-2 uppercase italic">
-                    Enregistrer la grimpe
-                </button>
+                <button onclick="saveResult()" class="w-full btn-neo bg-yellow-400 py-4 font-black text-xl uppercase italic">Valider</button>
             </div>
         </section>
 
-        <div class="flex justify-between items-center mb-4 px-1">
-            <h3 class="marker-font text-3xl text-slate-800">📊 BILAN</h3>
-            <span id="counter" class="bg-slate-900 text-white px-3 py-1 rounded-full text-xs font-bold">0 passage</span>
-        </div>
-        
+        <h3 class="marker-font text-3xl mb-4">📊 RÉSULTATS</h3>
         <div id="resultsList" class="space-y-4"></div>
-
     </main>
 
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-8 border-slate-900 p-4 flex justify-around items-center z-50">
         <button onclick="generatePDF()" class="flex flex-col items-center">
-            <div class="bg-teal-400 p-3 rounded-xl btn-neo mb-1 text-slate-900">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            </div>
-            <span class="text-[10px] font-black uppercase text-slate-700">Générer PDF</span>
+            <div class="bg-teal-400 p-3 rounded-xl btn-neo mb-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+            <span class="text-[10px] font-black uppercase">Export PDF</span>
         </button>
-        
-        <button onclick="clearData()" class="flex flex-col items-center">
-            <div class="bg-red-200 p-3 rounded-xl btn-neo mb-1 text-red-600 border-red-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            </div>
-            <span class="text-[10px] font-black uppercase text-red-600">Reset Session</span>
+        <button onclick="clearData()" class="flex flex-col items-center text-red-600">
+            <div class="bg-red-100 p-3 rounded-xl btn-neo mb-1 border-red-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
+            <span class="text-[10px] font-black uppercase">Reset</span>
         </button>
     </nav>
 
     <script>
         const HEIGHT_ORDER = ['Sol', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'TOP'];
-        let currentSelectedHeight = null;
-        let attempts = JSON.parse(localStorage.getItem('climbData_v4')) || [];
+        let selectedHeight = null;
+        // Chargement automatique au démarrage
+        let attempts = JSON.parse(localStorage.getItem('climbMaster_v5')) || [];
 
         function selectHeight(val) {
-            currentSelectedHeight = val;
-            document.querySelectorAll('.height-btn').forEach(btn => {
-                btn.classList.toggle('selected', btn.innerText === val);
-            });
+            selectedHeight = val;
+            document.querySelectorAll('.height-btn').forEach(btn => btn.classList.toggle('selected', btn.innerText === val));
         }
 
         function saveResult() {
             const name = document.getElementById('studentName').value.trim();
             const route = document.getElementById('routeNumber').value;
             const color = document.getElementById('routeColor').value;
-
-            if (!name || !route || !currentSelectedHeight) {
-                alert("Oups ! Il manque des informations pour valider la grimpe.");
-                return;
-            }
+            if (!name || !route || !selectedHeight) return alert("Remplis tous les champs !");
 
             const index = attempts.findIndex(a => a.name.toLowerCase() === name.toLowerCase() && a.route === route);
-
             if (index > -1) {
-                if (attempts[index].h2 === null) {
-                    attempts[index].h2 = currentSelectedHeight;
-                } else {
-                    alert("Cet élève a déjà complété ses 2 essais pour cette voie.");
-                }
+                if (attempts[index].h2 === null) attempts[index].h2 = selectedHeight;
+                else alert("Déjà 2 essais enregistrés.");
             } else {
-                attempts.push({ name, route, color, h1: currentSelectedHeight, h2: null });
+                attempts.push({ name, route, color, h1: selectedHeight, h2: null });
             }
 
-            localStorage.setItem('climbData_v4', JSON.stringify(attempts));
+            // Sauvegarde automatique immédiate
+            localStorage.setItem('climbMaster_v5', JSON.stringify(attempts));
             render();
             resetForm();
         }
 
         function render() {
             const list = document.getElementById('resultsList');
-            document.getElementById('counter').innerText = `${attempts.length} passage${attempts.length > 1 ? 's' : ''}`;
             list.innerHTML = "";
-            
-            const displayData = [...attempts].reverse();
-
-            displayData.forEach(data => {
-                let statusClass = "bg-white";
+            [...attempts].reverse().forEach(data => {
+                let status = "bg-white";
                 if (data.h2 !== null) {
-                    const idx1 = HEIGHT_ORDER.indexOf(data.h1);
-                    const idx2 = HEIGHT_ORDER.indexOf(data.h2);
-                    if (idx2 > idx1) statusClass = "status-up";
-                    else if (idx2 === idx1) statusClass = "status-equal";
-                    else statusClass = "status-down";
+                    const idx1 = HEIGHT_ORDER.indexOf(data.h1), idx2 = HEIGHT_ORDER.indexOf(data.h2);
+                    status = idx2 > idx1 ? "status-up" : (idx2 === idx1 ? "status-equal" : "status-down");
                 }
-
-                list.innerHTML += `
-                    <div class="card-neo ${statusClass} p-4 flex justify-between items-center animate-pop">
-                        <div>
-                            <p class="font-black text-xl uppercase leading-none text-slate-900">${data.name}</p>
-                            <p class="text-xs font-bold text-slate-600 mt-1 italic">Voie ${data.route} • ${data.color}</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="text-center">
-                                <span class="text-[8px] font-black opacity-50 block">ESSAI 1</span>
-                                <span class="bg-slate-900 text-white px-3 py-1 rounded-md font-black text-sm">${data.h1}</span>
-                            </div>
-                            <span class="font-black text-xl text-slate-900">→</span>
-                            <div class="text-center">
-                                <span class="text-[8px] font-black opacity-50 block">ESSAI 2</span>
-                                <span class="${data.h2 ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-400 border-2 border-dashed border-slate-400'} px-3 py-1 rounded-md font-black text-sm">
-                                    ${data.h2 || '?'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                list.innerHTML += `<div class="card-neo ${status} p-4 flex justify-between items-center">
+                    <div><p class="font-black uppercase">${data.name}</p><p class="text-xs font-bold">Voie ${data.route} (${data.color})</p></div>
+                    <div class="flex items-center gap-2 font-black"><span>${data.h1}</span><span>→</span><span class="${data.h2 ? 'bg-slate-900 text-white' : 'text-slate-400'} px-2 py-1 rounded">${data.h2 || '?'}</span></div>
+                </div>`;
             });
         }
 
         function resetForm() {
             document.getElementById('studentName').value = "";
             document.getElementById('routeNumber').value = "";
-            currentSelectedHeight = null;
+            selectedHeight = null;
             document.querySelectorAll('.height-btn').forEach(b => b.classList.remove('selected'));
         }
 
-        function clearData() {
-            if(confirm("Attention : Cela effacera tous les résultats de la séance actuelle !")) {
-                localStorage.removeItem('climbData_v4');
-                attempts = [];
-                render();
-            }
-        }
+        function clearData() { if(confirm("Effacer tout ?")) { localStorage.removeItem('climbMaster_v5'); attempts = []; render(); } }
 
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.setFontSize(22);
-            doc.setTextColor(30, 41, 59);
             doc.text("BILAN ESCALADE EPS", 14, 20);
-            const tableRows = attempts.map(a => [a.name, a.route, a.color, a.h1, a.h2 || "-"]);
-            doc.autoTable({
-                head: [['Grimpeur', 'Voie', 'Couleur', 'Essai 1', 'Essai 2']],
-                body: tableRows,
-                startY: 35,
-                headStyles: { fillColor: [45, 212, 191], textColor: [255, 255, 255] },
-            });
+            doc.autoTable({ head: [['Élève', 'Voie', 'Couleur', 'Essai 1', 'Essai 2']], body: attempts.map(a => [a.name, a.route, a.color, a.h1, a.h2 || '-']), startY: 30 });
             doc.save("resultats-escalade.pdf");
         }
 
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                const CACHE_NAME = 'climbmaster-v4';
-                self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll([location.href]))));
-                self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
-            `;
-            const blob = new Blob([swCode], {type: 'application/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
+            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
         }
-
         render();
     </script>
 </body>
