@@ -1,24 +1,20 @@
 {
   "name": "ClimbMaster EPS",
   "short_name": "ClimbMaster",
-  "description": "Application de suivi de progression en escalade pour le milieu scolaire.",
-  "start_url": "./index.html",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f1f5f9",
-  "theme_color": "#2dd4bf",
-  "orientation": "portrait",
+  "background_color": "#1e293b",
+  "theme_color": "#0ea5e9",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
